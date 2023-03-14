@@ -47,6 +47,8 @@ app.component("product-display",{
               <button class="button" v-on:click="remFromCart">Remove</button>
           </div>
         </div>
+        <review-list v-if="reviews.length" :reviews="reviews"></review-list>
+        <review-form @review-submited="addReview"></review-form>
         </div>`,
         data(){
             return{
@@ -66,21 +68,25 @@ app.component("product-display",{
                     quantity: 0,
                     onSale: false},
                 ],
-                sizes: ['S', "M", "L", "XL"]
+                sizes: ['S', "M", "L", "XL"],
+                reviews: []
             }
         },
         methods:{
             addToCart(){
-                this.cart ++
+                this.$emit('add-to-cart', this.variants[this.selectedVariant].id)
             },
             updateVariant(index){
                 this.selectedVariant = index
                 
             },
             remFromCart(){
-                if (this.cart > 0) {
-                    this.cart --
-                }    
+                
+                this.$emit('rem-fr-cart', this.variants[this.selectedVariant].id)
+                   
+            },
+            addReview(review){
+                this.reviews.push(review)
             }
             
         },
